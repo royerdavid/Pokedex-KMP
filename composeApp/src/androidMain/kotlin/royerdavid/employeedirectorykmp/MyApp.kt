@@ -1,6 +1,6 @@
 package royerdavid.employeedirectorykmp
 
-import KoinInitializer
+import royerdavid.employeedirectorykmp.di.KoinInitializer
 import android.app.Application
 
 class MyApp : Application() {

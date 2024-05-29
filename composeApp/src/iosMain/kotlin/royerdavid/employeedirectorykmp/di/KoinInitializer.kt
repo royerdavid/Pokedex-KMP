@@ -1,3 +1,5 @@
+package royerdavid.employeedirectorykmp.di
+
 import org.koin.core.context.startKoin
 
 actual class KoinInitializer {
