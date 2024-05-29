@@ -66,6 +66,7 @@ kotlin {
             implementation(compose.desktop.currentOs)
             implementation(libs.coroutines.swing)
             implementation(libs.ktor.client.cio)
+            implementation(libs.logback)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

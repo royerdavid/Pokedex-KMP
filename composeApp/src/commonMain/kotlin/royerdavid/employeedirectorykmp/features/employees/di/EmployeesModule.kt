@@ -6,7 +6,6 @@ import royerdavid.employeedirectorykmp.features.employees.data.remote.EmployeesA
 import royerdavid.employeedirectorykmp.features.employees.domain.EmployeesRepository
 
 val employeesModule = module {
-    //   viewModelOf(::EmployeeListViewModel)
 
 //    single {
 //        get<EmployeesDatabase>().dao

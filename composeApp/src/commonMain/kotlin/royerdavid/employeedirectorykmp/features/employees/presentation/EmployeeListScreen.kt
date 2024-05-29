@@ -1,4 +1,3 @@
-
 package royerdavid.employeedirectorykmp.features.employees.presentation
 
 import androidx.compose.foundation.clickable
@@ -9,6 +8,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,21 +18,12 @@ import royerdavid.employeedirectorykmp.di.koinViewModel
 import royerdavid.employeedirectorykmp.features.employees.domain.model.Employee
 
 
-//@Composable
-//fun EmployeeListPane(
-//    navigator: ThreePaneScaffoldNavigator<Any>
-//) {
-//    val viewModel = koinViewModel<EmployeeListViewModel>()
-//    EmployeeList(
-//        state = viewModel.state.collectAsState().value,
-//        onItemClick = { employee ->
-//            navigator.navigateTo(
-//                pane = ListDetailPaneScaffoldRole.Detail,
-//                content = employee.id
-//            )
-//        }
-//    )
-//}
+@Composable
+fun EmployeeListScreen() {
+    Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
+        EmployeeScreen()
+    }
+}
 
 @Composable
 fun EmployeeScreen() {
