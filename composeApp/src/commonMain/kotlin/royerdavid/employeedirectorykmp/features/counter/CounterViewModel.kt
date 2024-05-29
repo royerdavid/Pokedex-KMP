@@ -1,4 +1,4 @@
-package royerdavid.employeedirectorykmp
+package royerdavid.employeedirectorykmp.features.counter
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class MainViewModel: ViewModel() {
+class CounterViewModel: ViewModel() {
 
     private val _timer = MutableStateFlow(0)
     val timer = _timer.asStateFlow()

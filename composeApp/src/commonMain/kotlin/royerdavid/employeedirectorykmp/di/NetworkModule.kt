@@ -1,4 +1,3 @@
-package royerdavid.employeedirectorykmp.di
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -7,16 +6,16 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
+
 private const val BASE_URL = "https://s3.amazonaws.com/sq-mobile-interview/"
 
-
     // TODO
-//    single {
 //        ResourcesProvider(androidApplication())
 //    }
 
 
-val httpClientModule = module {
+
+val networkModule = module {
     single {
         // TODO Remove OkHttp as HttpClient parameter
         HttpClient {

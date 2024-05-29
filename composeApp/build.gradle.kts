@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
@@ -49,7 +50,8 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.lifecycle.viewmodel)
             implementation(libs.navigation.compose)
-            implementation(libs.ktor.client.okhttp)
+//            implementation(libs.compose.material3.adaptive.navigation)
+//            implementation(libs.compose.material3.adaptive.navigation.suite)
         }
 
         androidMain.dependencies {
@@ -57,6 +59,7 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.coroutines.android)
             implementation(libs.koin.client.android)
+            implementation(libs.ktor.client.okhttp)
             implementation(libs.okhttp.logging.interceptor)
         }
         desktopMain.dependencies {
