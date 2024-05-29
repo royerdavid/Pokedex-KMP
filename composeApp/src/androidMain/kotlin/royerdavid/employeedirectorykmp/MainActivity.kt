@@ -1,4 +1,4 @@
-package royer.david.employeedirectory.kmp
+package royerdavid.employeedirectorykmp
 
 import App
 import android.os.Bundle

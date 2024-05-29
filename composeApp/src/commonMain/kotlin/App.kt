@@ -1,6 +1,5 @@
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,11 +14,12 @@ import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
 import org.koin.compose.currentKoinScope
+import royerdavid.employeedirectorykmp.core.ui.theme.EmployeeDirectoryTheme
 
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
+    EmployeeDirectoryTheme {
         KoinContext {
             val navController = rememberNavController()
             NavHost(

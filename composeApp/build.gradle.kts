@@ -38,6 +38,7 @@ kotlin {
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
+            implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
@@ -56,10 +57,13 @@ kotlin {
             implementation(libs.coroutine.swing)
         }
     }
+
+    // Fix random error "testClasses' not found in project"
+    task("testClasses")
 }
 
 android {
-    namespace = "royer.david.employeedirectory.kmp"
+    namespace = "royerdavid.employeedirectorykmp"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -67,7 +71,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        applicationId = "royer.david.employeedirectory.kmp"
+        applicationId = "royerdavid.employeedirectorykmp"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -101,7 +105,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "royer.david.employeedirectory.kmp"
+            packageName = "royerdavid.employeedirectorykmp"
             packageVersion = "1.0.0"
         }
     }

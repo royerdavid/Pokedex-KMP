@@ -1,4 +1,4 @@
-package royer.david.employeedirectory.kmp
+package royerdavid.employeedirectorykmp
 
 import KoinInitializer
 import android.app.Application
