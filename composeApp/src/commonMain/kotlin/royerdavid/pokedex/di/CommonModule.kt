@@ -6,7 +6,7 @@ import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 
 
-private const val API_BASE_URL = "https://s3.amazonaws.com/sq-mobile-interview/"
+private const val API_BASE_URL = "https://api.pokemontcg.io/v2/"
 
 val commonModule = module {
     single {

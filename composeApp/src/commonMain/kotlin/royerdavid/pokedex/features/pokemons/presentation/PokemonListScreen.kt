@@ -1,4 +1,4 @@
-package royerdavid.pokedex.features.employees.presentation
+package royerdavid.pokedex.features.pokemons.presentation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -15,7 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import royerdavid.pokedex.di.koinViewModel
-import royerdavid.pokedex.features.employees.domain.model.Pokemon
+import royerdavid.pokedex.features.pokemons.domain.model.Pokemon
 
 
 @Composable
@@ -26,10 +26,6 @@ fun PokemonListScreen() {
         PokemonList(
             state = viewModel.state.collectAsState().value,
             onItemClick = { pokemon ->
-//            navigator.navigateTo(
-//                pane = ListDetailPaneScaffoldRole.Detail,
-//                content = employee.id
-//            )
             })
     }
 }
@@ -51,16 +47,16 @@ fun PokemonList(
             ) {
                 itemsIndexed(
                     items = state.pokemonList,
-                    key = { _, employee ->
-                        employee.id
+                    key = { _, pokemon ->
+                        pokemon.id
                     },
-                ) { index, employee ->
+                ) { index, pokemon ->
                     ListItem(
                         modifier = Modifier.clickable {
-                            onItemClick(employee)
+                            onItemClick(pokemon)
                         },
-                        headlineContent = { Text(employee.name) },
-                        supportingContent = { Text(employee.team) },
+                        headlineContent = { Text(pokemon.name) },
+                        supportingContent = { Text("TODO") },
                         leadingContent = {
                             Text("Image")
                         })
@@ -86,21 +82,3 @@ fun PokemonList(
         }
     }
 }
-
-//@Preview(showSystemUi = true)
-//@Composable
-//fun EmployeeListLoadingPreview() {
-//    EmployeeList(
-//        EmployeeListState(isLoading = true),
-//        onItemClick = {}
-//    )
-//}
-//
-//@Preview(showSystemUi = true)
-//@Composable
-//fun EmployeeListErrorPreview() {
-//    EmployeeList(
-//        EmployeeListState(emptyStateText = "Some error message"),
-//        onItemClick = {}
-//    )
-//}

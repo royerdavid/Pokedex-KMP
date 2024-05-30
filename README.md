@@ -31,4 +31,11 @@ TODO
 - Network logging
 - Share app name between platforms
 - Image loader
-- Use Pokemon API instead of employees from Square
+- LazyList pagination
+- Details screen
+- Sorting
+- Pull to refresh
+- Use cases
+- App bar
+- Scroll bar in Desktop
+- 

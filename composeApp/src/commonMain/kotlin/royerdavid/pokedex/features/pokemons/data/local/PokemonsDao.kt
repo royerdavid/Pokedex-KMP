@@ -1,10 +1,10 @@
-package royerdavid.pokedex.features.employees.data.local
+package royerdavid.pokedex.features.pokemons.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import royerdavid.pokedex.features.employees.data.local.entity.PokemonEntity
+import royerdavid.pokedex.features.pokemons.data.local.entity.PokemonEntity
 
 @Dao
 interface PokemonsDao {

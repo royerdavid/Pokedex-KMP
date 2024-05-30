@@ -1,9 +1,9 @@
-package royerdavid.pokedex.features.employees.data.remote.dto
+package royerdavid.pokedex.features.pokemons.data.remote.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class PokemonsRootDto(
-    @SerialName("employees") val employees: List<PokemonDto>
+    @SerialName("data") val data: List<PokemonDto>
 )
