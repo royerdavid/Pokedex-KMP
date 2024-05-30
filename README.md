@@ -25,6 +25,10 @@ TODO
 - *Desktop:* No scrollbars yet. Need to use keyboard or mouse wheel to scroll.
 
 # Improvements
+
 - Look at Koin doc for shared multiplatform modules: https://insert-koin.io/docs/reference/koin-mp/kmp/#shared-koin-module
 - Localization
 - Network logging
+- Share app name between platforms
+- Image loader
+- Use Pokemon API instead of employees from Square
