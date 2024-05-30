@@ -1,4 +1,4 @@
-package royerdavid.pokedex.features.employees.presentation
+package royerdavid.pokedex.features.pokemons.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
 import royerdavid.pokedex.core.util.Resource
-import royerdavid.pokedex.features.employees.domain.PokemonsRepository
+import royerdavid.pokedex.features.pokemons.domain.PokemonsRepository
 
 
 class PokemonListViewModel(
@@ -20,19 +20,19 @@ class PokemonListViewModel(
     val state = _state.asStateFlow()
 
     init {
-        loadEmployees()
+        loadPokemons()
     }
 
-    private fun loadEmployees() {
+    private fun loadPokemons() {
         viewModelScope.launch {
-            pokemonsRepository.getEmployees().onEach { resource ->
+            pokemonsRepository.getPokemons().onEach { resource ->
                 when (resource) {
                     is Resource.Success ->
                         _state.value = state.value.copy(
                             isLoading = false,
                             emptyStateText = if (resource.data.isNullOrEmpty()) {
-                                "TODO R.string.empty_state_no_employees"
-                                //resourcesProvider.getString(R.string.empty_state_no_employees)
+                                "TODO R.string.empty_state_no_pokemons"
+                                //resourcesProvider.getString(R.string.empty_state_no_pokemons)
                             } else {
                                 ""
                             },

@@ -1,14 +1,14 @@
-package royerdavid.pokedex.features.employees.di
+package royerdavid.pokedex.features.pokemons.di
 
 import androidx.room.RoomDatabase
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import org.koin.dsl.module
-import royerdavid.pokedex.features.employees.data.PokemonsRepositoryImpl
-import royerdavid.pokedex.features.employees.data.local.PokemonDatabase
-import royerdavid.pokedex.features.employees.data.remote.PokemonsApi
-import royerdavid.pokedex.features.employees.domain.PokemonsRepository
+import royerdavid.pokedex.features.pokemons.data.PokemonsRepositoryImpl
+import royerdavid.pokedex.features.pokemons.data.local.PokemonDatabase
+import royerdavid.pokedex.features.pokemons.data.remote.PokemonsApi
+import royerdavid.pokedex.features.pokemons.domain.PokemonsRepository
 
 
 val pokemonsModule = module {

@@ -45,6 +45,10 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.compose.core)
+            implementation(libs.coil)
+            implementation(libs.coil.network.ktor)
             implementation(libs.coroutines.core)
             implementation(libs.koin.compose)
             implementation(libs.ktor.client.core)
@@ -55,20 +59,19 @@ kotlin {
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
         }
-
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.coroutines.android)
+            implementation(libs.coroutines.android)
             implementation(libs.koin.client.android)
-            implementation(libs.ktor.client.okhttp)
-            implementation(libs.okhttp.logging.interceptor)
+            implementation(libs.ktor.client.android)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
-            implementation(libs.coroutines.swing)
             implementation(libs.ktor.client.cio)
             implementation(libs.logback)
+            runtimeOnly(libs.coroutines.swing)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
