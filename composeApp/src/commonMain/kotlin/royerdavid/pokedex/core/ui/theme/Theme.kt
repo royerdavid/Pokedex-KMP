@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import royerdavid.pokedex.core.ui.util.ApplyStatusBarTheme
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -28,25 +29,11 @@ fun PokedexTheme(
         else -> LightColorScheme
     }
 
-    applyStatusBarColor()
+    ApplyStatusBarTheme(darkTheme)
 
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
         content = content
     )
-}
-
-
-@Composable
-fun applyStatusBarColor() {
-// TODO. Set only for Android
-//    val view = LocalView.current
-//    if (!view.isInEditMode) {
-//        SideEffect {
-//            val window = (view.context as Activity).window
-//            window.statusBarColor = colorScheme.primary.toArgb()
-//            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-//        }
-//    }
 }
