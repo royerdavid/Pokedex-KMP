@@ -1,6 +1,6 @@
 import androidx.compose.ui.window.ComposeUIViewController
-import royerdavid.employeedirectorykmp.RootScreen
-import royerdavid.employeedirectorykmp.di.KoinInitializer
+import royerdavid.pokedex.RootScreen
+import royerdavid.pokedex.di.KoinInitializer
 
 @Suppress("FunctionName")
 fun MainViewController() = ComposeUIViewController(

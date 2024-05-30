@@ -1,4 +1,4 @@
-rootProject.name = "EmployeeDirectoryKmp"
+rootProject.name = "Pokedex"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {

@@ -80,7 +80,7 @@ kotlin {
 }
 
 android {
-    namespace = "royerdavid.employeedirectorykmp"
+    namespace = "royerdavid.pokedex"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -88,7 +88,7 @@ android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        applicationId = "royerdavid.employeedirectorykmp"
+        applicationId = "royerdavid.pokedex"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -122,7 +122,7 @@ compose.desktop {
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "royerdavid.employeedirectorykmp"
+            packageName = "royerdavid.pokedex"
             packageVersion = "1.0.0"
         }
     }
