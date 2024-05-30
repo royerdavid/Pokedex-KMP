@@ -2,6 +2,7 @@ package royerdavid.employeedirectorykmp.features.employees.data.remote.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import royerdavid.employeedirectorykmp.features.employees.data.local.entity.EmployeeEntity
 import royerdavid.employeedirectorykmp.features.employees.domain.model.Employee
 import royerdavid.employeedirectorykmp.features.employees.domain.model.EmployeeType
 
@@ -17,17 +18,17 @@ data class EmployeeDto(
     @SerialName("team") val team: String,
     @SerialName("uuid") val uuid: String
 ) {
-//    fun toEmployeeEntity() = EmployeeEntity(
-//        id = uuid,
-//        name = fullName,
-//        phoneNumber = phoneNumber,
-//        email = emailAddress,
-//        biography = biography,
-//        smallImageUrl = photoUrlSmall,
-//        largeImageUrl = photoUrlLarge,
-//        team = team,
-//        employeeType = employeeType
-//    )
+    fun toEmployeeEntity() = EmployeeEntity(
+        id = uuid,
+        name = fullName,
+        phoneNumber = phoneNumber,
+        email = emailAddress,
+        biography = biography,
+        smallImageUrl = photoUrlSmall,
+        largeImageUrl = photoUrlLarge,
+        team = team,
+        employeeType = employeeType
+    )
 
     fun toEmployee() = Employee(
         id = uuid,
