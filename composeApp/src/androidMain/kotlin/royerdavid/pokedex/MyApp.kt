@@ -1,7 +1,7 @@
 package royerdavid.pokedex
 
-import royerdavid.pokedex.di.KoinInitializer
 import android.app.Application
+import royerdavid.pokedex.di.KoinInitializer
 
 class MyApp : Application() {
 

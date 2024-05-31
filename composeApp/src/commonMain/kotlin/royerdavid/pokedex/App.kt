@@ -6,9 +6,12 @@ import royerdavid.pokedex.core.ui.util.InitComposeImageLoader
 import royerdavid.pokedex.features.pokemons.presentation.PokemonListScreen
 
 @Composable
-fun RootScreen() {
+fun App() {
     PokedexTheme {
+        // Init the compose app
         InitComposeImageLoader()
+
+        // Navigation starts here
         PokemonListScreen()
     }
 }

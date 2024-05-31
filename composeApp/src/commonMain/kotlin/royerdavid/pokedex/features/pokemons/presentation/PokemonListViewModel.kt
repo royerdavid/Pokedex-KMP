@@ -8,6 +8,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.SerializationException
+import org.jetbrains.compose.resources.getString
+import pokedex.composeapp.generated.resources.Res
+import pokedex.composeapp.generated.resources.error_invalid_response
+import pokedex.composeapp.generated.resources.error_no_items_found
+import pokedex.composeapp.generated.resources.error_unexpected
 import royerdavid.pokedex.core.util.Resource
 import royerdavid.pokedex.features.pokemons.domain.PokemonsRepository
 
@@ -31,8 +36,8 @@ class PokemonListViewModel(
                         _state.value = state.value.copy(
                             isLoading = false,
                             emptyStateText = if (resource.data.isNullOrEmpty()) {
-                                "TODO R.string.empty_state_no_pokemons"
-                                //resourcesProvider.getString(R.string.empty_state_no_pokemons)
+                                getString(Res.string.error_no_items_found)
+
                             } else {
                                 ""
                             },
@@ -40,15 +45,12 @@ class PokemonListViewModel(
                         )
 
                     is Resource.Error ->
-                        // TODO: implement snackbar for when there's an error but we have cached data
                         _state.value = state.value.copy(
                             isLoading = false,
                             emptyStateText = if (resource.exception is SerializationException) {
-                                "TODO R.string.invalid_response"
-                                //resourcesProvider.getString(R.string.invalid_response)
+                                getString(Res.string.error_invalid_response)
                             } else {
-                                "TODO R.string.unexpected_error"
-                                //resourcesProvider.getString(R.string.unexpected_error)
+                                getString(Res.string.error_unexpected)
                             },
                             pokemonList = resource.data ?: emptyList()
                         )

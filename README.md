@@ -1,42 +1,52 @@
-# Features
-- Platforms: Android, Desktop
-- Offline mode
-- Dark/Light modes
+# Pokedex
 
-# How to run
-TODO
+This project is mainly a sandbox to play with new functionalities of *Kotlin Multiplatform*.
 
-# Technology used
+## Features
 
-- UI: Compose Multiplatform
-- Dependency injection: Koin
-- Networking: Ktor
-- Storage: Room
-- Serialization: kotlinx.serialization
-- Concurrency: Coroutines
+- **Platforms:** Android & Desktop
+- **Display:** Small & large (resizable in Desktop)
+- **Orientations:** Portrait & landscape
+- **Display modes:** Dark & light modes
+- **Localization:** English & French
+- **Others:**
+    - Caching for offline mode, faster loading and error fallback
 
-# Architecture
+## How to run
+
+Run "*composeApp*" configuration:
+
+- [Android](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-multiplatform-create-first-app.html#run-your-application-on-android)
+- [Desktop](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-multiplatform-create-first-app.html#run-your-application-on-desktop)
+
+## Technology used
+
+- **UI:** Compose multiplatform
+- **Dependency injection:** Koin
+- **Networking:** Ktor
+- **Image loading:** Coil
+- **Storage:** Room
+- **Serialization:** kotlinx.serialization
+- **Concurrency:** Coroutines
+
+## Architecture
 
 - Clean architecture
 - MVI
 
-# Limitations
+## Limitations
 
-- *iOS*: I don't have a Mac to compile & test it.
-- *Desktop:* No scrollbars yet. Need to use keyboard or mouse wheel to scroll.
+- **iOS**: I don't have a Mac to compile & test the project.
 
-# Improvements
+## Improvements ideas
 
-- Look at Koin doc for shared multiplatform modules: https://insert-koin.io/docs/reference/koin-mp/kmp/#shared-koin-module
-- Localization
-- Network logging
-- Share app name between platforms
-- Image loader
-- LazyList pagination
+- Unit tests
+- Add a logger
+- Network logs
+- Grid pagination
 - Details screen
-- Sorting
-- Pull to refresh
-- Use cases
+- Search
+- Sorting & filters
 - App bar
-- Scroll bar in Desktop
-- 
+- Refresh button
+- Use cases layer

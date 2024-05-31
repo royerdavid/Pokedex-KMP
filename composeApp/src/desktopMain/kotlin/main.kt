@@ -1,14 +1,14 @@
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import royerdavid.pokedex.RootScreen
+import royerdavid.pokedex.App
 import royerdavid.pokedex.di.KoinInitializer
 
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "Pokedex", // TODO
+        title = "Pokedex",
     ) {
         KoinInitializer().init()
-        RootScreen()
+        App()
     }
 }

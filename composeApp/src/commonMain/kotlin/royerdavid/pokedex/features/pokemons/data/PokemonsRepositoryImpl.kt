@@ -34,7 +34,6 @@ class PokemonsRepositoryImpl(
             emit(Resource.Error(e, cachedPokemonList))
         }
 
-        // TODO: Optimise logic. The current one always give a success
         // Newly inserted items
         val newPokemonList = dao.getAll().map { it.toPokemon() }
         emit(Resource.Success(newPokemonList))

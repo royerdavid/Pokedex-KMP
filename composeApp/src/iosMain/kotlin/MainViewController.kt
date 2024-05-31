@@ -1,5 +1,5 @@
 import androidx.compose.ui.window.ComposeUIViewController
-import royerdavid.pokedex.RootScreen
+import royerdavid.pokedex.App
 import royerdavid.pokedex.di.KoinInitializer
 
 @Suppress("FunctionName")
@@ -8,5 +8,5 @@ fun MainViewController() = ComposeUIViewController(
         KoinInitializer().init()
     }
 ) {
-    RootScreen()
+    App()
 }
