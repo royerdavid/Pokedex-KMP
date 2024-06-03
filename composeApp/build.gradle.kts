@@ -49,9 +49,12 @@ kotlin {
             implementation(libs.coil)
             implementation(libs.coil.network.ktor)
             implementation(libs.coroutines.core)
+            implementation(libs.kermit)
+            implementation(libs.kermit.koin)
             implementation(libs.koin.compose)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.logging)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.lifecycle.viewmodel)
             implementation(libs.navigation.compose)
@@ -83,7 +86,7 @@ kotlin {
 
 android {
     namespace = "royerdavid.pokedex"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk = 34
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
@@ -91,8 +94,8 @@ android {
 
     defaultConfig {
         applicationId = "royerdavid.pokedex"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
+        minSdk = 26
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
     }

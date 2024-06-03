@@ -1,12 +1,13 @@
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import royerdavid.pokedex.APP_NAME
 import royerdavid.pokedex.App
 import royerdavid.pokedex.di.KoinInitializer
 
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "Pokedex",
+        title = APP_NAME,
     ) {
         KoinInitializer().init()
         App()

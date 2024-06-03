@@ -7,7 +7,6 @@ This project serves as a sandbox to experiment with new functionalities of *Kotl
 - **Platforms:** 
   - Android
   - Desktop
-  - iOS (see limitations bellow)
 - **Display:**
   - Dark & light modes
   - Small & large devices
@@ -16,7 +15,7 @@ This project serves as a sandbox to experiment with new functionalities of *Kotl
   - English
   - French
 - **Others:**
-    - Caching for offline mode & pre-loading data
+  - Caching for offline mode & pre-loading data
 
 ## How to run
 
@@ -27,13 +26,14 @@ Run the "*composeApp*" configuration for your desired platform:
 
 ## Technology used
 
-- **UI:** Compose Multiplatform
-- **Dependency Injection:** Koin
-- **Networking:** Ktor
-- **Image Loading:** Coil
-- **Storage:** Room
-- **Serialization:** kotlinx.serialization
-- **Concurrency:** Coroutines
+- **UI:** [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
+- **Dependency Injection:** [Koin](https://insert-koin.io/)
+- **Networking:** [Ktor](https://ktor.io/)
+- **Image Loading:** [Coil](https://coil-kt.github.io/coil/)
+- **Storage:** [Room](https://developer.android.com/kotlin/multiplatform/room)
+- **Serialization:** [kotlinx.serialization](https://kotlinlang.org/docs/serialization.html)
+- **Concurrency:** [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
+- **Logging:** [Kermit the log](https://kermit.touchlab.co/docs/)
 
 ## Architecture
 
@@ -47,8 +47,7 @@ Run the "*composeApp*" configuration for your desired platform:
 ## Future Improvements
 
 - Implement unit tests
-- Add a logger
-- Improve network logs
+- Split the project in modules
 - Implement pagination
 - Put back the details screen from original Android project
 - Add search functionality
