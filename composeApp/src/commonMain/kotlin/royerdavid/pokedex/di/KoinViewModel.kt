@@ -6,7 +6,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import org.koin.compose.currentKoinScope
 
 /**
- * Utility method from Philipp Lackner trainings. To replace when available in Koin library.
+ * Utility method from Philipp Lackner Youtube`s training videos.
+ * To replace when available in Koin library.
  */
 @Composable
 inline fun <reified T : ViewModel> koinViewModel(): T {

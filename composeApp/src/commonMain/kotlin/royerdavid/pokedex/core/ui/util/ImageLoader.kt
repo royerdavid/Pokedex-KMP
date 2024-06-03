@@ -39,7 +39,7 @@ fun getAsyncImageLoader(context: PlatformContext) =
         }
         .build()
 
-fun newDiskCache(): DiskCache =
+private fun newDiskCache(): DiskCache =
     DiskCache.Builder()
         .directory(FileSystem.SYSTEM_TEMPORARY_DIRECTORY / "image_cache")
         .maxSizeBytes(256L * 1024 * 1024) // 256 MB

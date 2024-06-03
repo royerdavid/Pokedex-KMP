@@ -1,10 +1,12 @@
 package royerdavid.pokedex.di
 
-import commonModule
 import royerdavid.pokedex.features.pokemons.di.pokemonsModule
 
 fun appModule() = listOf(
+    // Main modules
     commonModule,
-    pokemonsModule,
-    platformModule
+    platformModule,
+
+    // Features module
+    pokemonsModule
 )
