@@ -49,12 +49,10 @@ Run the "*composeApp*" configuration for your desired platform:
 
 ## Future Improvements
 
-- Implement unit tests
-- Split the project in modules
+- Create unit tests
 - Implement pagination
 - Put back the details screen from original Android project
+- Split the project in modules
 - Add search functionality
 - Implement sorting & filters
-- Add an app bar
-- Add a refresh button
 - Introduce a use cases layer

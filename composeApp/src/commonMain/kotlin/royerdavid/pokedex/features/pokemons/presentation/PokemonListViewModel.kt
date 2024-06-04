@@ -21,7 +21,7 @@ class PokemonListViewModel(
     private val pokemonsRepository: PokemonsRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(PokemonListState(isLoading = true))
+    private val _state = MutableStateFlow(PokemonListUiState(isLoading = true))
     val state = _state.asStateFlow()
 
     init {
@@ -29,6 +29,7 @@ class PokemonListViewModel(
     }
 
     private fun loadPokemons() {
+        // TODO cancel previous job if it's already loading
         viewModelScope.launch {
             pokemonsRepository.getPokemons().onEach { resource ->
                 when (resource) {
@@ -62,6 +63,13 @@ class PokemonListViewModel(
                         )
                 }
             }.launchIn(this)
+        }
+    }
+
+    fun onUiEvent(event: PokemonListUiEvent) {
+        when (event) {
+            is PokemonListUiEvent.OnPokemonClick -> Unit // TODO
+            PokemonListUiEvent.Refresh -> loadPokemons()
         }
     }
 }

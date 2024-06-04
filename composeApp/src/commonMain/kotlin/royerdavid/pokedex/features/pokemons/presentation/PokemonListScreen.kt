@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,10 +16,17 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -31,34 +37,61 @@ import coil3.compose.AsyncImage
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import pokedex.composeapp.generated.resources.Res
+import pokedex.composeapp.generated.resources.action_refresh
 import pokedex.composeapp.generated.resources.network_refresh
+import royerdavid.pokedex.APP_NAME
 import royerdavid.pokedex.core.ui.component.DesktopVerticalScrollbar
 import royerdavid.pokedex.di.koinViewModel
-import royerdavid.pokedex.features.pokemons.domain.model.Pokemon
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun PokemonListScreen() {
-    Scaffold(modifier = Modifier.fillMaxSize()) { _ ->
-        val viewModel = koinViewModel<PokemonListViewModel>()
+    val viewModel = koinViewModel<PokemonListViewModel>()
+    val onUiEvent = viewModel::onUiEvent
 
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = {
+                    Text(APP_NAME)
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            onUiEvent(PokemonListUiEvent.Refresh)
+                        }) {
+                        Icon(
+                            imageVector = Icons.Filled.Refresh,
+                            contentDescription = stringResource(Res.string.action_refresh)
+                        )
+                    }
+                },
+            )
+        },
+    ) { innerPadding ->
         PokemonList(
-            state = viewModel.state.collectAsState().value,
-            onItemClick = { _ ->
-                // TODO
-            })
+            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+            uiState = viewModel.state.collectAsState().value,
+            onUiEvent = onUiEvent
+        )
     }
 }
 
 @Composable
 fun PokemonList(
-    state: PokemonListState,
-    onItemClick: (Pokemon) -> Unit
+    modifier: Modifier = Modifier,
+    uiState: PokemonListUiState,
+    onUiEvent: (PokemonListUiEvent) -> Unit
 ) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier
     ) {
-        val itemsSize = state.pokemonList.size
+        val itemsSize = uiState.pokemonList.size
 
         if (itemsSize > 0) {
             val lazyGridState: LazyGridState = rememberLazyGridState()
@@ -71,13 +104,13 @@ fun PokemonList(
                 horizontalArrangement = Arrangement.Center
             ) {
                 items(itemsSize) { i ->
-                    val pokemon = state.pokemonList[i]
+                    val pokemon = uiState.pokemonList[i]
 
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
                             .clickable {
-                                onItemClick(pokemon)
+                                onUiEvent(PokemonListUiEvent.OnPokemonClick(pokemon))
                             }
                             .padding(horizontal = 16.dp, vertical = 10.dp)
                     ) {
@@ -99,16 +132,16 @@ fun PokemonList(
                 modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
                 lazyGridState = lazyGridState
             )
-        } else if (state.emptyStateText.isNotBlank()) {
+        } else if (uiState.emptyStateText.isNotBlank()) {
             // Empty state
             Text(
-                text = state.emptyStateText,
+                text = uiState.emptyStateText,
                 modifier = Modifier.align(Alignment.Center)
             )
         }
 
         // Loading
-        if (state.isLoading) {
+        if (uiState.isLoading) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -118,9 +151,9 @@ fun PokemonList(
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.secondaryContainer),
+                        .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)),
                     text = stringResource(Res.string.network_refresh),
-                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodySmall
                 )

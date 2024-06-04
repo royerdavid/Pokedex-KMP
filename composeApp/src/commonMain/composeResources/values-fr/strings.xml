@@ -1,6 +1,7 @@
 <resources>
-    <string name="network_refresh">Rafraichissement des données</string>
+    <string name="network_refresh">Rafraîchissement</string>
     <string name="error_invalid_response">Erreur de serveur</string>
     <string name="error_no_items_found">Aucun item trouvé</string>
     <string name="error_unexpected">Erreur inatendue</string>
+    <string name="action_refresh">Rafraîchir</string>
 </resources>
