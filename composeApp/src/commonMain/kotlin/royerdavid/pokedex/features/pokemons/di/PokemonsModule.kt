@@ -12,7 +12,6 @@ import royerdavid.pokedex.features.pokemons.domain.PokemonsRepository
 
 
 val pokemonsModule = module {
-
     single<PokemonsRepository> {
         PokemonsRepositoryImpl(get(), get())
     }
@@ -28,6 +27,8 @@ val pokemonsModule = module {
     single {
         get<PokemonDatabase>().dao
     }
+
+    includes(pokemonsPlatformModule)
 }
 
 private fun getPokemonsDatabase(
