@@ -2,20 +2,23 @@
 
 This project serves as a sandbox to experiment with new functionalities of *Kotlin Multiplatform*.
 
+This small project adopts a complex structure, mirroring the organizational principles of
+larger-scale projects.
+
 ## Features
 
-- **Platforms:** 
-  - Android
-  - Desktop
+- **Platforms:**
+    - Android
+    - Desktop
 - **Display:**
-  - Dark & light modes
-  - Small & large devices
-  - Portrait & landscape
-- **Localization:** 
-  - English
-  - French
+    - Dark & light modes
+    - Small & large devices
+    - Portrait & landscape
+- **Localization:**
+    - English
+    - French
 - **Others:**
-  - Caching for offline mode & pre-loading data
+    - Caching for offline mode & pre-loading data
 
 ## How to run
 
@@ -26,14 +29,14 @@ Run the "*composeApp*" configuration for your desired platform:
 
 ## Technology used
 
-- **UI:** [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
-- **Dependency Injection:** [Koin](https://insert-koin.io/)
-- **Networking:** [Ktor](https://ktor.io/)
-- **Image Loading:** [Coil](https://coil-kt.github.io/coil/)
-- **Storage:** [Room](https://developer.android.com/kotlin/multiplatform/room)
-- **Serialization:** [kotlinx.serialization](https://kotlinlang.org/docs/serialization.html)
-- **Concurrency:** [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
-- **Logging:** [Kermit the log](https://kermit.touchlab.co/docs/)
+- UI: [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
+- Dependency Injection: [Koin](https://insert-koin.io/)
+- Networking: [Ktor](https://ktor.io/)
+- Image Loading: [Coil](https://coil-kt.github.io/coil/)
+- Storage: [Room](https://developer.android.com/kotlin/multiplatform/room)
+- Serialization: [kotlinx.serialization](https://kotlinlang.org/docs/serialization.html)
+- Concurrency: [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
+- Logging: [Kermit the log](https://kermit.touchlab.co/docs/)
 
 ## Architecture
 
@@ -42,7 +45,7 @@ Run the "*composeApp*" configuration for your desired platform:
 
 ## Limitations
 
-- **iOS:** I cannot compile and test the project as Currently not supported as I don't have a Mac.
+- **iOS:** I need a Mac to build the project to make sure it works on iOS.
 
 ## Future Improvements
 

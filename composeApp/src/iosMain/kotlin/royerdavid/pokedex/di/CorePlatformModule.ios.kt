@@ -7,7 +7,7 @@ import royerdavid.pokedex.features.pokemons.data.local.POKEMON_DATABASE_FILE_NAM
 import royerdavid.pokedex.features.pokemons.data.local.PokemonDatabase
 import royerdavid.pokedex.features.pokemons.presentation.PokemonListViewModel
 
-actual val platformModule = module {
+actual val corePlatformModule = module {
     singleOf(::PokemonListViewModel)
 
     single {
