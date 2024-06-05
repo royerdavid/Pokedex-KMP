@@ -2,7 +2,7 @@ import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import royerdavid.pokedex.APP_NAME
 import royerdavid.pokedex.App
-import royerdavid.pokedex.di.KoinInitializer
+import royerdavid.pokedex.KoinInitializer
 
 fun main() = application {
     Window(
