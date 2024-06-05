@@ -1,6 +1,6 @@
 import androidx.compose.ui.window.ComposeUIViewController
 import royerdavid.pokedex.App
-import royerdavid.pokedex.di.KoinInitializer
+import royerdavid.pokedex.KoinInitializer
 
 @Suppress("FunctionName")
 fun MainViewController() = ComposeUIViewController(

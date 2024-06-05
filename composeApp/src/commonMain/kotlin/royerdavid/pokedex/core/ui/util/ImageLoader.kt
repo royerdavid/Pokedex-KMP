@@ -56,7 +56,7 @@ private class CoilLogger(
         throwable: Throwable?
     ) {
         if (message != null) {
-            logger.d(throwable = throwable, tag = tag, message = message)
+            logger.d(throwable = throwable, tag = "ImageLoader", message = message)
         }
     }
 }
