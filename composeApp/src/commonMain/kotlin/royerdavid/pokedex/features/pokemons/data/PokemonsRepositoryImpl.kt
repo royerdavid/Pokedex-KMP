@@ -9,7 +9,7 @@ import royerdavid.pokedex.features.pokemons.data.local.PokemonsDao
 import royerdavid.pokedex.features.pokemons.data.remote.PokemonsApi
 import royerdavid.pokedex.features.pokemons.data.remote.dto.toPokemonEntity
 import royerdavid.pokedex.features.pokemons.domain.PokemonsRepository
-import royerdavid.pokedex.features.pokemons.domain.model.Pokemon
+import royerdavid.pokedex.features.pokemons.domain.model.PokemonSummary
 
 /**
  * Repository to handle pokemon data
@@ -19,16 +19,17 @@ class PokemonsRepositoryImpl(
     private val dao: PokemonsDao
 ) : PokemonsRepository {
 
-    override suspend fun getPokemons(): Flow<Resource<List<Pokemon>>> = flow {
+    override suspend fun getPokemons(): Flow<Resource<List<PokemonSummary>>> = flow {
         emit(Resource.Loading())
         val cachedPokemonList = dao.getAll().map { it.toPokemon() }
         emit(Resource.Loading(cachedPokemonList))
 
         try {
-            val remotePokemonList = api.getPokemons().getOrThrow().data
-            dao.insertAll(remotePokemonList
-                .distinctBy { it.name }
-                .map { it.toPokemonEntity() }
+            val remotePokemonList = api.getPokemons().getOrThrow().results
+            dao.insertAll(
+                remotePokemonList.map {
+                    it.toPokemonEntity()
+                }
             )
         } catch (e: IOException) {
             emit(Resource.Error(e, cachedPokemonList))

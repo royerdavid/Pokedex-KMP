@@ -9,7 +9,7 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import royerdavid.pokedex.core.util.Logger
 
-private const val API_BASE_URL = "https://api.pokemontcg.io/v2/"
+private const val API_BASE_URL = "https://pokeapi.co/api/v2/"
 private const val LOG_TAG = "HttpClient"
 
 /**

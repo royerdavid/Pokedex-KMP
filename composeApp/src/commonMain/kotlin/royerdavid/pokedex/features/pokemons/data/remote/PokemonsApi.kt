@@ -3,17 +3,18 @@ package royerdavid.pokedex.features.pokemons.data.remote
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import royerdavid.pokedex.features.pokemons.data.remote.dto.PokemonsRootDto
 
-class PokemonsApi(private val ktorClient: HttpClient) {
+class PokemonsApi(private val httpClient: HttpClient) {
 
     suspend fun getPokemons(): Result<PokemonsRootDto> = runCatching {
-        ktorClient.get("cards") {
+        httpClient.get("pokemon") {
             url {
-                parameters.append("pageSize", "128")
-                parameters.append("orderBy", "name")
-                parameters.append("select", "id,name,types,images")
+                parameters.append("limit", "99999")
             }
+            contentType(ContentType.Application.Json)
         }.body()
     }
 }

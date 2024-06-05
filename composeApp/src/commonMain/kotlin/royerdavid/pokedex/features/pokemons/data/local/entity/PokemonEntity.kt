@@ -2,20 +2,18 @@ package royerdavid.pokedex.features.pokemons.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import royerdavid.pokedex.features.pokemons.domain.model.Pokemon
+import royerdavid.pokedex.features.pokemons.domain.model.PokemonSummary
 
 @Entity
 data class PokemonEntity(
     @PrimaryKey
     val id: String,
     val name: String,
-    val smallImageUrl: String? = null,
-    val largeImageUrl: String? = null
+    val imageUrl: String? = null
 ) {
-    fun toPokemon() = Pokemon(
+    fun toPokemon() = PokemonSummary(
         id = id,
         name = name,
-        smallImageUrl = smallImageUrl,
-        largeImageUrl = largeImageUrl
+        imageUrl = imageUrl
     )
 }

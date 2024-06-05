@@ -6,25 +6,24 @@ import royerdavid.pokedex.features.pokemons.data.local.entity.PokemonEntity
 
 @Serializable
 data class PokemonsRootDto(
-    val data: List<PokemonDto>
+    val count: Int,
+    val next: String?,
+    val previous: String?,
+    val results: List<NamedApiResource>
 )
 
 @Serializable
-data class PokemonDto(
-    val id: String,
+data class NamedApiResource(
     val name: String,
-    val images: ImagesDto?
+    val url: String
 )
 
-@Serializable
-data class ImagesDto(
-    val small: String,
-    val large: String
-)
+fun NamedApiResource.toPokemonEntity(): PokemonEntity {
+    val number = url.split("/").dropLast(1).last()
 
-fun PokemonDto.toPokemonEntity() = PokemonEntity(
-    id = id,
-    name = name,
-    smallImageUrl = images?.small,
-    largeImageUrl = images?.large
-)
+    return PokemonEntity(
+        id = number,
+        name = name,
+        imageUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/$number.png"
+    )
+}

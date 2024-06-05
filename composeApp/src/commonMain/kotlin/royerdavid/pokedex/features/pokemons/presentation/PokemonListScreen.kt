@@ -7,10 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -91,20 +91,21 @@ fun PokemonList(
     Box(
         modifier = modifier
     ) {
-        val itemsSize = uiState.pokemonList.size
+        val itemsSize = uiState.pokemonSummaryList.size
 
         if (itemsSize > 0) {
             val lazyGridState: LazyGridState = rememberLazyGridState()
+            val imageSize = 160.dp
 
             // List items
             LazyVerticalGrid(
                 state = lazyGridState,
-                columns = GridCells.Adaptive(160.dp),
+                columns = GridCells.Adaptive(imageSize),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
                 items(itemsSize) { i ->
-                    val pokemon = uiState.pokemonList[i]
+                    val pokemon = uiState.pokemonSummaryList[i]
 
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -116,8 +117,8 @@ fun PokemonList(
                     ) {
                         AsyncImage(
                             // Min size to reduce cell jumping when images are loaded
-                            modifier = Modifier.defaultMinSize(minHeight = 128.dp),
-                            model = pokemon.smallImageUrl,
+                            modifier = Modifier.requiredSize(imageSize),
+                            model = pokemon.imageUrl,
                             contentDescription = null
                         )
                         Spacer(modifier = Modifier.size(4.dp))

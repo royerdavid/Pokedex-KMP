@@ -42,7 +42,7 @@ class PokemonListViewModel(
                             } else {
                                 ""
                             },
-                            pokemonList = resource.data ?: emptyList()
+                            pokemonSummaryList = resource.data ?: emptyList()
                         )
 
                     is Resource.Error ->
@@ -53,13 +53,13 @@ class PokemonListViewModel(
                             } else {
                                 getString(Res.string.error_unexpected)
                             },
-                            pokemonList = resource.data ?: emptyList()
+                            pokemonSummaryList = resource.data ?: emptyList()
                         )
 
                     is Resource.Loading ->
                         _state.value = state.value.copy(
                             isLoading = true,
-                            pokemonList = resource.data ?: state.value.pokemonList
+                            pokemonSummaryList = resource.data ?: state.value.pokemonSummaryList
                         )
                 }
             }.launchIn(this)
