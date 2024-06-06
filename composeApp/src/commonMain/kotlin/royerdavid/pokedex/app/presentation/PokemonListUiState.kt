@@ -6,5 +6,5 @@ import androidx.compose.runtime.Immutable
 data class PokemonListUiState(
     val isLoading: Boolean = false,
     val isSearching: Boolean = false,
-    val userMessage: String? = null
+    val userMessages: List<String> = emptyList()
 )

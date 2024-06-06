@@ -21,6 +21,7 @@ import royerdavid.pokedex.app.domain.PokemonsRepository
 import royerdavid.pokedex.app.domain.model.PokemonSummary
 import royerdavid.pokedex.app.domain.model.doesMatchSearchQuery
 import royerdavid.pokedex.core.util.Resource
+import royerdavid.pokedex.core.util.copyEnqueue
 
 
 @OptIn(FlowPreview::class)
@@ -74,13 +75,16 @@ class PokemonListViewModel(
                     }
 
                     is Resource.Error -> {
+                        val errorMessage = if (resource.exception is SerializationException) {
+                            Res.string.error_invalid_response
+                        } else {
+                            Res.string.error_unexpected
+                        }
                         _uiState.value = uiState.value.copy(
                             isLoading = false,
-                            userMessage = if (resource.exception is SerializationException) {
-                                getString(Res.string.error_invalid_response)
-                            } else {
-                                getString(Res.string.error_unexpected)
-                            }
+                            userMessages = uiState.value.userMessages.copyEnqueue(
+                                getString(errorMessage)
+                            )
                         )
 
                         _pokemons.value = resource.data ?: emptyList()
@@ -105,8 +109,8 @@ class PokemonListViewModel(
             is PokemonListUiEvent.OnItemClick -> Unit // TODO
             is PokemonListUiEvent.OnSearchText -> _searchText.value = event.text
             PokemonListUiEvent.Refresh -> fetchPokemons()
-            PokemonListUiEvent.UserMessageShown -> _uiState.value =
-                uiState.value.copy(userMessage = null)
+            PokemonListUiEvent.OnUserMessagesClear -> _uiState.value =
+                uiState.value.copy(userMessages = emptyList())
         }
     }
 }
