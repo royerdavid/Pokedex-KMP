@@ -19,6 +19,7 @@ larger-scale projects.
     - French
 - **Others:**
     - Caching for offline mode & pre-loading data
+  - Search
 
 ## How to run
 
@@ -52,7 +53,5 @@ Run the "*composeApp*" configuration for your desired platform:
 - Create unit tests
 - Put back the details screen from original Android project
 - Split the project in modules
-- Implement search functionality
 - Introduce a use cases layer
 - Display error messages in a "snackbar" instead of an empty state
-- 

@@ -2,7 +2,6 @@ package royerdavid.pokedex.app.data.remote.dto
 
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class PokemonsRootDto(
     val count: Int,

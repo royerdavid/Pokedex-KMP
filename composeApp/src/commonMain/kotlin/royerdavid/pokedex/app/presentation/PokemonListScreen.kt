@@ -1,6 +1,5 @@
 package royerdavid.pokedex.app.presentation
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -25,19 +23,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import pokedex.composeapp.generated.resources.Res
 import pokedex.composeapp.generated.resources.action_refresh
 import royerdavid.pokedex.APP_NAME
+import royerdavid.pokedex.app.domain.model.PokemonSummary
+import royerdavid.pokedex.app.presentation.components.PokemonItem
+import royerdavid.pokedex.app.presentation.components.SearchTextField
 import royerdavid.pokedex.core.ui.component.DesktopVerticalScrollbar
 import royerdavid.pokedex.di.koinViewModel
 
@@ -51,10 +50,6 @@ fun PokemonListScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
-                ),
                 title = {
                     Text(APP_NAME)
                 },
@@ -72,77 +67,75 @@ fun PokemonListScreen() {
             )
         },
     ) { innerPadding ->
-        PokemonList(
-            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
-            uiState = viewModel.state.collectAsState().value,
-            onUiEvent = onUiEvent
-        )
+        val uiState by viewModel.uiState.collectAsState()
+        val searchText by viewModel.searchText.collectAsState()
+        val pokemons by viewModel.pokemons.collectAsState()
+
+        Box(
+            modifier = Modifier.padding(top = innerPadding.calculateTopPadding())
+        ) {
+            Column {
+                SearchTextField(
+                    value = searchText,
+                    onValueChange = { newText -> onUiEvent(PokemonListUiEvent.OnSearchText(newText)) },
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
+                )
+
+                Spacer(modifier = Modifier.size(4.dp))
+
+                PokemonList(
+                    uiState = uiState,
+                    onUiEvent = onUiEvent,
+                    pokemons = pokemons
+                )
+            }
+        }
     }
 }
 
 @Composable
 fun PokemonList(
-    modifier: Modifier = Modifier,
     uiState: PokemonListUiState,
-    onUiEvent: (PokemonListUiEvent) -> Unit
+    onUiEvent: (PokemonListUiEvent) -> Unit,
+    pokemons: List<PokemonSummary>,
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
     ) {
-        val itemsSize = uiState.pokemonSummaryList.size
+        // Loading
+        if (uiState.isLoading) {
+            LinearProgressIndicator(
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
 
-        if (itemsSize > 0) {
+        if (pokemons.isNotEmpty()) {
             val lazyGridState: LazyGridState = rememberLazyGridState()
-            val imageSize = 160.dp
 
             // List items
             LazyVerticalGrid(
                 state = lazyGridState,
-                columns = GridCells.Adaptive(imageSize),
+                columns = GridCells.Adaptive(160.dp),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp),
                 horizontalArrangement = Arrangement.Center
             ) {
-                items(itemsSize) { i ->
-                    val pokemon = uiState.pokemonSummaryList[i]
-
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .clickable {
-                                onUiEvent(PokemonListUiEvent.OnItemClick(pokemon))
-                            }
-                            .padding(horizontal = 16.dp, vertical = 10.dp)
-                    ) {
-                        AsyncImage(
-                            // Min size to reduce cell jumping when images are loaded
-                            modifier = Modifier.requiredSize(imageSize),
-                            model = pokemon.imageUrl,
-                            contentDescription = null
-                        )
-                        Spacer(modifier = Modifier.size(4.dp))
-                        Text(
-                            text = pokemon.name,
-                            textAlign = TextAlign.Center
-                        )
-                    }
+                items(pokemons.size) { i ->
+                    PokemonItem(
+                        pokemon = pokemons[i],
+                        onUiEvent = onUiEvent
+                    )
                 }
             }
             DesktopVerticalScrollbar(
                 modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
                 lazyGridState = lazyGridState
             )
-        } else if (uiState.emptyStateText.isNotBlank()) {
-            // Empty state
+        } else {
             Text(
+                color = MaterialTheme.colorScheme.onPrimary,
                 text = uiState.emptyStateText,
                 modifier = Modifier.align(Alignment.Center)
-            )
-        }
-
-        // Loading
-        if (uiState.isLoading) {
-            LinearProgressIndicator(
-                modifier = Modifier.fillMaxWidth(),
             )
         }
     }

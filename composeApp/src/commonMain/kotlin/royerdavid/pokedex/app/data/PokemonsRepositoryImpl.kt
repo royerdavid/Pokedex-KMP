@@ -6,6 +6,8 @@ import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import royerdavid.pokedex.app.data.local.PokemonsDao
+import royerdavid.pokedex.app.data.mappers.toPokemon
+import royerdavid.pokedex.app.data.mappers.toPokemonEntity
 import royerdavid.pokedex.app.data.remote.PokemonsApi
 import royerdavid.pokedex.app.data.remote.dto.NamedApiResourceDto
 import royerdavid.pokedex.app.domain.PokemonsRepository
@@ -44,7 +46,9 @@ class PokemonsRepositoryImpl(
         }
 
         // Newly inserted items
-        val newPokemonList = dao.getAll().map { it.toPokemon() }
+        val newPokemonList = dao.getAll().map {
+            it.toPokemon()
+        }
         emit(Resource.Success(newPokemonList))
     }
 }
