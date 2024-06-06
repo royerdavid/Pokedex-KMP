@@ -6,7 +6,7 @@ import royerdavid.pokedex.app.presentation.PokemonListScreen
 import royerdavid.pokedex.core.ui.theme.PokedexTheme
 import royerdavid.pokedex.core.ui.util.InitComposeImageLoader
 
-const val APP_NAME = "Pokedex"
+const val APP_NAME = "Pokédex-KMP"
 
 @Composable
 fun App() {

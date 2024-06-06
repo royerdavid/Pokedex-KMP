@@ -1,4 +1,4 @@
-# Pokedex
+# Pokédex-KMP
 
 This project serves as a sandbox to experiment with new functionalities of *Kotlin Multiplatform*.
 

@@ -16,7 +16,6 @@ import kotlinx.serialization.SerializationException
 import org.jetbrains.compose.resources.getString
 import pokedex.composeapp.generated.resources.Res
 import pokedex.composeapp.generated.resources.error_invalid_response
-import pokedex.composeapp.generated.resources.error_no_items_found
 import pokedex.composeapp.generated.resources.error_unexpected
 import royerdavid.pokedex.app.domain.PokemonsRepository
 import royerdavid.pokedex.app.domain.model.PokemonSummary
@@ -29,7 +28,7 @@ class PokemonListViewModel(
     private val pokemonsRepository: PokemonsRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(PokemonListUiState(isLoading = true))
+    private val _uiState = MutableStateFlow(PokemonListUiState())
     val uiState = _uiState.asStateFlow()
 
     private val _searchText = MutableStateFlow("")
@@ -39,8 +38,7 @@ class PokemonListViewModel(
     val pokemons = searchText
         .debounce(200)
         .onEach {
-            _uiState.value =
-                uiState.value.copy(isSearching = true)
+            _uiState.value = uiState.value.copy(isSearching = true)
         }
         .combine(_pokemons) { text, allPokemons ->
             if (text.isBlank()) {
@@ -52,14 +50,7 @@ class PokemonListViewModel(
             }
         }
         .onEach {
-            _uiState.value = uiState.value.copy(
-                emptyStateText = if (!uiState.value.isLoading && it.isEmpty()) {
-                    getString(Res.string.error_no_items_found)
-                } else {
-                    ""
-                },
-                isSearching = false
-            )
+            _uiState.value = uiState.value.copy(isSearching = false)
         }
         .stateIn(
             scope = viewModelScope,
@@ -77,13 +68,7 @@ class PokemonListViewModel(
                 when (resource) {
                     is Resource.Success -> {
                         _uiState.value = uiState.value.copy(
-                            isLoading = false,
-                            emptyStateText = if (resource.data.isNullOrEmpty()) {
-                                getString(Res.string.error_no_items_found)
-
-                            } else {
-                                ""
-                            }
+                            isLoading = false
                         )
                         _pokemons.value = resource.data ?: emptyList()
                     }
@@ -91,7 +76,7 @@ class PokemonListViewModel(
                     is Resource.Error -> {
                         _uiState.value = uiState.value.copy(
                             isLoading = false,
-                            emptyStateText = if (resource.exception is SerializationException) {
+                            userMessage = if (resource.exception is SerializationException) {
                                 getString(Res.string.error_invalid_response)
                             } else {
                                 getString(Res.string.error_unexpected)
@@ -118,8 +103,10 @@ class PokemonListViewModel(
     fun onUiEvent(event: PokemonListUiEvent) {
         when (event) {
             is PokemonListUiEvent.OnItemClick -> Unit // TODO
-            PokemonListUiEvent.Refresh -> fetchPokemons()
             is PokemonListUiEvent.OnSearchText -> _searchText.value = event.text
+            PokemonListUiEvent.Refresh -> fetchPokemons()
+            PokemonListUiEvent.UserMessageShown -> _uiState.value =
+                uiState.value.copy(userMessage = null)
         }
     }
 }

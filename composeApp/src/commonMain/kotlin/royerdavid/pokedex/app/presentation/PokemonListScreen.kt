@@ -19,13 +19,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -46,6 +49,16 @@ import royerdavid.pokedex.di.koinViewModel
 fun PokemonListScreen() {
     val viewModel = koinViewModel<PokemonListViewModel>()
     val onUiEvent = viewModel::onUiEvent
+    val snackbarHostState = remember { SnackbarHostState() }
+    val uiState by viewModel.uiState.collectAsState()
+
+    // Display the snackbar
+    uiState.userMessage?.let { text ->
+        LaunchedEffect(text) {
+            snackbarHostState.showSnackbar(text)
+            onUiEvent(PokemonListUiEvent.UserMessageShown)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -66,8 +79,10 @@ fun PokemonListScreen() {
                 },
             )
         },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
     ) { innerPadding ->
-        val uiState by viewModel.uiState.collectAsState()
         val searchText by viewModel.searchText.collectAsState()
         val pokemons by viewModel.pokemons.collectAsState()
 
@@ -110,33 +125,24 @@ fun PokemonList(
             )
         }
 
-        if (pokemons.isNotEmpty()) {
-            val lazyGridState: LazyGridState = rememberLazyGridState()
-
-            // List items
-            LazyVerticalGrid(
-                state = lazyGridState,
-                columns = GridCells.Adaptive(160.dp),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                items(pokemons.size) { i ->
-                    PokemonItem(
-                        pokemon = pokemons[i],
-                        onUiEvent = onUiEvent
-                    )
-                }
+        // List items
+        val lazyGridState: LazyGridState = rememberLazyGridState()
+        LazyVerticalGrid(
+            state = lazyGridState,
+            columns = GridCells.Adaptive(160.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 24.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            items(pokemons.size) { i ->
+                PokemonItem(
+                    pokemon = pokemons[i],
+                    onUiEvent = onUiEvent
+                )
             }
-            DesktopVerticalScrollbar(
-                modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                lazyGridState = lazyGridState
-            )
-        } else {
-            Text(
-                color = MaterialTheme.colorScheme.onPrimary,
-                text = uiState.emptyStateText,
-                modifier = Modifier.align(Alignment.Center)
-            )
         }
+        DesktopVerticalScrollbar(
+            modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+            lazyGridState = lazyGridState
+        )
     }
 }
