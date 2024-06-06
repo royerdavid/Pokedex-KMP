@@ -25,7 +25,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -41,6 +40,7 @@ import royerdavid.pokedex.app.domain.model.PokemonSummary
 import royerdavid.pokedex.app.presentation.components.PokemonItem
 import royerdavid.pokedex.app.presentation.components.SearchTextField
 import royerdavid.pokedex.core.ui.component.DesktopVerticalScrollbar
+import royerdavid.pokedex.core.ui.component.handleSnackbarMessages
 import royerdavid.pokedex.di.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,13 +52,11 @@ fun PokemonListScreen() {
     val snackbarHostState = remember { SnackbarHostState() }
     val uiState by viewModel.uiState.collectAsState()
 
-    // Display the snackbar
-    uiState.userMessage?.let { text ->
-        LaunchedEffect(text) {
-            snackbarHostState.showSnackbar(text)
-            onUiEvent(PokemonListUiEvent.UserMessageShown)
-        }
-    }
+    handleSnackbarMessages(
+        snackbarHostState = snackbarHostState,
+        userMessages = uiState.userMessages,
+        onDismiss = { onUiEvent(PokemonListUiEvent.UserMessageShown) }
+    )
 
     Scaffold(
         topBar = {
