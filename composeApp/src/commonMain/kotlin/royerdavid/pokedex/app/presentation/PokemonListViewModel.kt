@@ -21,7 +21,7 @@ import royerdavid.pokedex.app.domain.PokemonsRepository
 import royerdavid.pokedex.app.domain.model.PokemonSummary
 import royerdavid.pokedex.app.domain.model.doesMatchSearchQuery
 import royerdavid.pokedex.core.util.Resource
-import royerdavid.pokedex.core.util.copyEnqueue
+import royerdavid.pokedex.core.util.copyEnqueueDistinct
 
 
 @OptIn(FlowPreview::class)
@@ -82,7 +82,7 @@ class PokemonListViewModel(
                         }
                         _uiState.value = uiState.value.copy(
                             isLoading = false,
-                            userMessages = uiState.value.userMessages.copyEnqueue(
+                            userMessages = uiState.value.userMessages.copyEnqueueDistinct(
                                 getString(errorMessage)
                             )
                         )
@@ -106,11 +106,22 @@ class PokemonListViewModel(
 
     fun onUiEvent(event: PokemonListUiEvent) {
         when (event) {
-            is PokemonListUiEvent.OnItemClick -> Unit // TODO
+            is PokemonListUiEvent.OnItemClick -> onItemClick(event.pokemonSummary)
             is PokemonListUiEvent.OnSearchText -> _searchText.value = event.text
             PokemonListUiEvent.Refresh -> fetchPokemons()
-            PokemonListUiEvent.OnUserMessagesClear -> _uiState.value =
-                uiState.value.copy(userMessages = emptyList())
+            PokemonListUiEvent.OnUserMessagesClear -> clearUserMessageQueue()
         }
+    }
+
+    private fun onItemClick(pokemonSummary: PokemonSummary) {
+        _uiState.value = uiState.value.copy(
+            userMessages = uiState.value.userMessages.copyEnqueueDistinct(
+                "TODO. Implement details screen"
+            )
+        )
+    }
+
+    private fun clearUserMessageQueue() {
+        _uiState.value = uiState.value.copy(userMessages = emptyList())
     }
 }

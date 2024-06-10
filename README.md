@@ -54,4 +54,4 @@ Run the "*composeApp*" configuration for your desired platform:
 - Put back the details screen from original Android project
 - Split the project in modules
 - Introduce a use cases layer
-- Display error messages in a "snackbar" instead of an empty state
+- Improve error handling to have more specific messages

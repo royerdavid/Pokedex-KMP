@@ -1,10 +1,14 @@
 package royerdavid.pokedex.core.util
 
-/**
- * Returns a new [List] filled with all elements plus the new item.
- * Consecutive messages with same content are ignored.
- */
-fun List<String>.copyEnqueue(item: String): List<String> =
-    toMutableList().apply {
-        add(item)
-    }
+fun List<String>.copyEnqueueDistinct(item: String): List<String> {
+    /**
+     * Returns a new [List] with the new item queued if it isn't already present. If present, the
+     * original list is returned.
+     */
+    return if (this.contains(item)) {
+        this
+    } else
+        toMutableList().apply {
+            add(item)
+        }
+}

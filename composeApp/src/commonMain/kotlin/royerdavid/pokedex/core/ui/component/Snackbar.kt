@@ -22,7 +22,11 @@ fun handleSnackbarMessages(
 
     scope.launch {
         for (message in userMessages) {
-            snackbarHostState.showSnackbar(message)
+            // Ignore messages when another similar one is already displayed. This improves UI
+            // by not displaying 5 consecutive "no internet connections" messages.
+            if (message != snackbarHostState.currentSnackbarData?.visuals?.message) {
+                snackbarHostState.showSnackbar(message)
+            }
         }
     }
 
