@@ -36,6 +36,7 @@ kotlin {
     sourceSets {
         val desktopMain by getting
 
+        // Common
         commonMain.dependencies {
             api(libs.koin.core)
             implementation(compose.runtime)
@@ -61,6 +62,11 @@ kotlin {
             implementation(libs.room.runtime)
             implementation(libs.sqlite.bundled)
         }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
+
+        // Platform specific
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)

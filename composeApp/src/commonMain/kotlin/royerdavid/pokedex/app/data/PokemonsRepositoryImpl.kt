@@ -6,8 +6,8 @@ import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import royerdavid.pokedex.app.data.local.PokemonsDao
-import royerdavid.pokedex.app.data.mappers.toPokemon
-import royerdavid.pokedex.app.data.mappers.toPokemonEntity
+import royerdavid.pokedex.app.data.mappers.toEntity
+import royerdavid.pokedex.app.data.mappers.toModel
 import royerdavid.pokedex.app.data.remote.PokemonsApi
 import royerdavid.pokedex.app.data.remote.dto.NamedApiResourceDto
 import royerdavid.pokedex.app.domain.PokemonsRepository
@@ -22,15 +22,15 @@ class PokemonsRepositoryImpl(
     private val dao: PokemonsDao
 ) : PokemonsRepository {
 
-    override suspend fun getPokemons(): Flow<Resource<List<PokemonSummary>>> = flow {
+    override suspend fun getPokemonSummaries(): Flow<Resource<List<PokemonSummary>>> = flow {
         emit(Resource.Loading())
-        val cachedPokemonList = dao.getAll().map { it.toPokemon() }
+        val cachedPokemonList = dao.getAllPokemonSummaries().map { it.toModel() }
         emit(Resource.Loading(cachedPokemonList))
 
         var remotePokemonList: List<NamedApiResourceDto>? = null
 
         try {
-            remotePokemonList = api.getPokemons().getOrThrow().results
+            remotePokemonList = api.getPokemonSummaries().getOrThrow().results
         } catch (e: IOException) {
             emit(Resource.Error(e, cachedPokemonList))
         } catch (e: ResponseException) {
@@ -40,14 +40,14 @@ class PokemonsRepositoryImpl(
         if (!remotePokemonList.isNullOrEmpty()) {
             dao.insertAll(
                 remotePokemonList.map {
-                    it.toPokemonEntity()
+                    it.toEntity()
                 }
             )
         }
 
         // Newly inserted items
-        val newPokemonList = dao.getAll().map {
-            it.toPokemon()
+        val newPokemonList = dao.getAllPokemonSummaries().map {
+            it.toModel()
         }
         emit(Resource.Success(newPokemonList))
     }

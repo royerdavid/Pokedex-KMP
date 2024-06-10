@@ -4,16 +4,16 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import royerdavid.pokedex.app.data.local.entity.PokemonEntity
+import royerdavid.pokedex.app.data.local.entity.PokemonSummaryEntity
 
 @Dao
 interface PokemonsDao {
-    @Query("SELECT * FROM PokemonEntity")
-    suspend fun getAll(): List<PokemonEntity>
+    @Query("SELECT * FROM PokemonSummaryEntity")
+    suspend fun getAllPokemonSummaries(): List<PokemonSummaryEntity>
 
-    @Query("SELECT * FROM PokemonEntity WHERE id=:id")
-    suspend fun getById(id: String): PokemonEntity
+    @Query("SELECT * FROM PokemonSummaryEntity WHERE id=:id")
+    suspend fun getPokemonSummaryById(id: Int): PokemonSummaryEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(pokemonEntityList: List<PokemonEntity>)
+    suspend fun insertAll(pokemonSummaryEntityList: List<PokemonSummaryEntity>)
 }

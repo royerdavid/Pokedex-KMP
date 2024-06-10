@@ -65,7 +65,7 @@ class PokemonListViewModel(
 
     private fun fetchPokemons() {
         viewModelScope.launch {
-            pokemonsRepository.getPokemons().onEach { resource ->
+            pokemonsRepository.getPokemonSummaries().onEach { resource ->
                 when (resource) {
                     is Resource.Success -> {
                         _uiState.value = uiState.value.copy(
@@ -113,6 +113,7 @@ class PokemonListViewModel(
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun onItemClick(pokemonSummary: PokemonSummary) {
         _uiState.value = uiState.value.copy(
             userMessages = uiState.value.userMessages.copyEnqueueDistinct(
