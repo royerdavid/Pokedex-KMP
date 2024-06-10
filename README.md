@@ -50,8 +50,8 @@ Run the "*composeApp*" configuration for your desired platform:
 
 ## Future Improvements
 
-- Create unit tests
+- Improve error handling to have more specific messages
+- Introduce a use cases layer
+- Create unit tests for ViewModel
 - Put back the details screen from original Android project
 - Split the project in modules
-- Introduce a use cases layer
-- Improve error handling to have more specific messages
