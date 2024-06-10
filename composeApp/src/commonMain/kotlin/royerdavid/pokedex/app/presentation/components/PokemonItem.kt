@@ -14,19 +14,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import royerdavid.pokedex.app.domain.model.PokemonSummary
-import royerdavid.pokedex.app.presentation.PokemonListUiEvent
+import royerdavid.pokedex.app.presentation.PokemonListAction
 
 @Composable
 fun PokemonItem(
     pokemon: PokemonSummary,
-    onUiEvent: (PokemonListUiEvent) -> Unit,
+    onAction: (PokemonListAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .clickable {
-                onUiEvent(PokemonListUiEvent.OnItemClick(pokemon))
+                onAction(PokemonListAction.OnItemClick(pokemon))
             }
             .padding(horizontal = 16.dp, vertical = 10.dp)
     ) {

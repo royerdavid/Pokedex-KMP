@@ -29,7 +29,7 @@ class PokemonListViewModel(
     private val pokemonsRepository: PokemonsRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(PokemonListUiState())
+    private val _uiState = MutableStateFlow(PokemonListState())
     val uiState = _uiState.asStateFlow()
 
     private val _searchText = MutableStateFlow("")
@@ -104,12 +104,12 @@ class PokemonListViewModel(
         }
     }
 
-    fun onUiEvent(event: PokemonListUiEvent) {
+    fun onAction(event: PokemonListAction) {
         when (event) {
-            is PokemonListUiEvent.OnItemClick -> onItemClick(event.pokemonSummary)
-            is PokemonListUiEvent.OnSearchText -> _searchText.value = event.text
-            PokemonListUiEvent.Refresh -> fetchPokemons()
-            PokemonListUiEvent.OnUserMessagesClear -> clearUserMessageQueue()
+            is PokemonListAction.OnItemClick -> onItemClick(event.pokemonSummary)
+            is PokemonListAction.OnSearchText -> _searchText.value = event.text
+            PokemonListAction.Refresh -> fetchPokemons()
+            PokemonListAction.OnUserMessagesClear -> clearUserMessageQueue()
         }
     }
 

@@ -1,6 +1,6 @@
 package royerdavid.pokedex.core.util
 
-fun List<String>.copyEnqueueDistinct(item: String): List<String> {
+fun <T> List<T>.copyEnqueueDistinct(item: T): List<T> {
     /**
      * Returns a new [List] with the new item queued if it isn't already present. If present, the
      * original list is returned.

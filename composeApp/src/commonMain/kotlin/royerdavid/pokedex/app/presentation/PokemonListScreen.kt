@@ -48,14 +48,14 @@ import royerdavid.pokedex.di.koinViewModel
 @Composable
 fun PokemonListScreen() {
     val viewModel = koinViewModel<PokemonListViewModel>()
-    val onUiEvent = viewModel::onUiEvent
+    val onAction = viewModel::onAction
     val snackbarHostState = remember { SnackbarHostState() }
     val uiState by viewModel.uiState.collectAsState()
 
     handleSnackbarMessages(
         snackbarHostState = snackbarHostState,
         userMessages = uiState.userMessages,
-        onUserMessagesClear = { onUiEvent(PokemonListUiEvent.OnUserMessagesClear) }
+        onUserMessagesClear = { onAction(PokemonListAction.OnUserMessagesClear) }
     )
 
     Scaffold(
@@ -67,7 +67,7 @@ fun PokemonListScreen() {
                 actions = {
                     IconButton(
                         onClick = {
-                            onUiEvent(PokemonListUiEvent.Refresh)
+                            onAction(PokemonListAction.Refresh)
                         }) {
                         Icon(
                             imageVector = Icons.Filled.Refresh,
@@ -90,7 +90,7 @@ fun PokemonListScreen() {
             Column {
                 SearchTextField(
                     value = searchText,
-                    onValueChange = { newText -> onUiEvent(PokemonListUiEvent.OnSearchText(newText)) },
+                    onValueChange = { newText -> onAction(PokemonListAction.OnSearchText(newText)) },
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
                 )
 
@@ -98,7 +98,7 @@ fun PokemonListScreen() {
 
                 PokemonList(
                     uiState = uiState,
-                    onUiEvent = onUiEvent,
+                    onAction = onAction,
                     pokemons = pokemons
                 )
             }
@@ -108,8 +108,8 @@ fun PokemonListScreen() {
 
 @Composable
 fun PokemonList(
-    uiState: PokemonListUiState,
-    onUiEvent: (PokemonListUiEvent) -> Unit,
+    uiState: PokemonListState,
+    onAction: (PokemonListAction) -> Unit,
     pokemons: List<PokemonSummary>,
     modifier: Modifier = Modifier
 ) {
@@ -134,7 +134,7 @@ fun PokemonList(
             items(pokemons.size) { i ->
                 PokemonItem(
                     pokemon = pokemons[i],
-                    onUiEvent = onUiEvent
+                    onAction = onAction
                 )
             }
         }
