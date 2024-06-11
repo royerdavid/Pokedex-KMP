@@ -5,6 +5,3 @@ data class PokemonSummary(
     val name: String,
     val imageUrl: String? = null
 )
-
-fun PokemonSummary.doesMatchSearchQuery(query: String): Boolean =
-    name.contains(query.trim(), ignoreCase = true)

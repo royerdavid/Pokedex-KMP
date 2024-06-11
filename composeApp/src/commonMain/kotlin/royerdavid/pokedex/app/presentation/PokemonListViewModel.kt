@@ -2,127 +2,92 @@ package royerdavid.pokedex.app.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.serialization.SerializationException
-import org.jetbrains.compose.resources.getString
-import pokedex.composeapp.generated.resources.Res
-import pokedex.composeapp.generated.resources.error_invalid_response
-import pokedex.composeapp.generated.resources.error_unexpected
 import royerdavid.pokedex.app.domain.PokemonsRepository
 import royerdavid.pokedex.app.domain.model.PokemonSummary
-import royerdavid.pokedex.app.domain.model.doesMatchSearchQuery
 import royerdavid.pokedex.core.util.Resource
 import royerdavid.pokedex.core.util.copyEnqueueDistinct
 
 
-@OptIn(FlowPreview::class)
 class PokemonListViewModel(
-    private val pokemonsRepository: PokemonsRepository
+    private val repository: PokemonsRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(PokemonListState())
     val uiState = _uiState.asStateFlow()
 
-    private val _searchText = MutableStateFlow("")
-    val searchText = _searchText.asStateFlow()
-
-    private val _pokemons = MutableStateFlow(listOf<PokemonSummary>())
-    val pokemons = searchText
-        .debounce(200)
-        .onEach {
-            _uiState.value = uiState.value.copy(isSearching = true)
-        }
-        .combine(_pokemons) { text, allPokemons ->
-            if (text.isBlank()) {
-                allPokemons
-            } else {
-                allPokemons.filter {
-                    it.doesMatchSearchQuery(text)
-                }
-            }
-        }
-        .onEach {
-            _uiState.value = uiState.value.copy(isSearching = false)
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = _pokemons.value
-        )
+    private var searchJob: Job? = null
 
     init {
-        fetchPokemons()
-    }
-
-    private fun fetchPokemons() {
-        viewModelScope.launch {
-            pokemonsRepository.getPokemonSummaries().onEach { resource ->
-                when (resource) {
-                    is Resource.Success -> {
-                        _uiState.value = uiState.value.copy(
-                            isLoading = false
-                        )
-                        _pokemons.value = resource.data ?: emptyList()
-                    }
-
-                    is Resource.Error -> {
-                        val errorMessage = if (resource.exception is SerializationException) {
-                            Res.string.error_invalid_response
-                        } else {
-                            Res.string.error_unexpected
-                        }
-                        _uiState.value = uiState.value.copy(
-                            isLoading = false,
-                            userMessages = uiState.value.userMessages.copyEnqueueDistinct(
-                                getString(errorMessage)
-                            )
-                        )
-
-                        _pokemons.value = resource.data ?: emptyList()
-                    }
-
-                    is Resource.Loading -> {
-                        _uiState.value = uiState.value.copy(
-                            isLoading = true,
-                        )
-
-                        resource.data?.let {
-                            _pokemons.value = it
-                        }
-                    }
-                }
-            }.launchIn(this)
-        }
+        getPokemons()
     }
 
     fun onAction(event: PokemonListAction) {
         when (event) {
-            is PokemonListAction.OnItemClick -> onItemClick(event.pokemonSummary)
-            is PokemonListAction.OnSearchText -> _searchText.value = event.text
-            PokemonListAction.Refresh -> fetchPokemons()
-            PokemonListAction.OnUserMessagesClear -> clearUserMessageQueue()
+            is PokemonListAction.OnItemClick ->
+                onItemClick(event.pokemonSummary)
+
+            is PokemonListAction.OnSearchQueryChange -> {
+                _uiState.value = _uiState.value.copy(searchQuery = event.query)
+                searchJob?.cancel()
+                searchJob = viewModelScope.launch {
+                    delay(500L)
+                    getPokemons()
+                }
+            }
+
+            PokemonListAction.Refresh ->
+                getPokemons(fetchFromRemote = true)
+
+            PokemonListAction.OnTransientMessagesClear ->
+                clearTransientMessageQueue()
+        }
+    }
+
+    private fun getPokemons(fetchFromRemote: Boolean = false) {
+        val query = _uiState.value.searchQuery.lowercase()
+
+        viewModelScope.launch {
+            repository
+                .getPokemonSummaries(fetchFromRemote, query)
+                .collect { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            result.data?.let { listings ->
+                                _uiState.value = _uiState.value.copy(pokemons = listings)
+                            }
+                        }
+
+                        is Resource.Error -> {
+                            _uiState.value = _uiState.value.copy(
+                                transientMessages = _uiState.value.transientMessages.copyEnqueueDistinct(
+                                    result.exception?.message ?: "TODO: display nice error here"
+                                )
+                            )
+                        }
+
+                        is Resource.Loading -> {
+                            _uiState.value = _uiState.value.copy(isLoading = result.isLoading)
+                        }
+                    }
+                }
         }
     }
 
     @Suppress("UNUSED_PARAMETER")
     private fun onItemClick(pokemonSummary: PokemonSummary) {
-        _uiState.value = uiState.value.copy(
-            userMessages = uiState.value.userMessages.copyEnqueueDistinct(
+        _uiState.value = _uiState.value.copy(
+            transientMessages = _uiState.value.transientMessages.copyEnqueueDistinct(
                 "TODO. Implement details screen"
             )
         )
     }
 
-    private fun clearUserMessageQueue() {
-        _uiState.value = uiState.value.copy(userMessages = emptyList())
+    private fun clearTransientMessageQueue() {
+        _uiState.value = _uiState.value.copy(transientMessages = emptyList())
     }
 }

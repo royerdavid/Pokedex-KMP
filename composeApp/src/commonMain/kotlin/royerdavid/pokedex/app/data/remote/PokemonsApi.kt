@@ -8,12 +8,11 @@ import royerdavid.pokedex.app.data.remote.dto.PokemonsRootDto
 
 class PokemonsApi(private val httpClient: HttpClient) {
 
-    suspend fun getPokemonSummaries(): Result<PokemonsRootDto> = runCatching {
+    suspend fun getPokemonSummaries(): PokemonsRootDto =
         httpClient.get(POKEMONS) {
             url {
                 parameters.append("offset", "0")
                 parameters.append("limit", "9999")
             }
         }.body()
-    }
 }

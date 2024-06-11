@@ -54,8 +54,8 @@ fun PokemonListScreen() {
 
     handleSnackbarMessages(
         snackbarHostState = snackbarHostState,
-        userMessages = uiState.userMessages,
-        onUserMessagesClear = { onAction(PokemonListAction.OnUserMessagesClear) }
+        userMessages = uiState.transientMessages,
+        onUserMessagesClear = { onAction(PokemonListAction.OnTransientMessagesClear) }
     )
 
     Scaffold(
@@ -81,16 +81,19 @@ fun PokemonListScreen() {
             SnackbarHost(hostState = snackbarHostState)
         },
     ) { innerPadding ->
-        val searchText by viewModel.searchText.collectAsState()
-        val pokemons by viewModel.pokemons.collectAsState()
-
         Box(
             modifier = Modifier.padding(top = innerPadding.calculateTopPadding())
         ) {
             Column {
                 SearchTextField(
-                    value = searchText,
-                    onValueChange = { newText -> onAction(PokemonListAction.OnSearchText(newText)) },
+                    value = uiState.searchQuery,
+                    onValueChange = { newText ->
+                        onAction(
+                            PokemonListAction.OnSearchQueryChange(
+                                newText
+                            )
+                        )
+                    },
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
                 )
 
@@ -99,7 +102,7 @@ fun PokemonListScreen() {
                 PokemonList(
                     uiState = uiState,
                     onAction = onAction,
-                    pokemons = pokemons
+                    pokemons = uiState.pokemons
                 )
             }
         }

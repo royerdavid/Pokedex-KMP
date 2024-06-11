@@ -5,5 +5,6 @@ import royerdavid.pokedex.app.domain.model.PokemonSummary
 import royerdavid.pokedex.core.util.Resource
 
 interface PokemonsRepository {
-    suspend fun getPokemonSummaries(): Flow<Resource<List<PokemonSummary>>>
+    suspend fun getPokemonSummaries(fetchFromRemote: Boolean, query: String = ""):
+            Flow<Resource<List<PokemonSummary>>>
 }

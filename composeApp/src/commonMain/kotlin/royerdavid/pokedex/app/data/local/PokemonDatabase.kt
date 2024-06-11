@@ -8,7 +8,7 @@ const val POKEMON_DATABASE_FILE_NAME = "pokemon.db"
 
 @Database(
     entities = [PokemonSummaryEntity::class],
-    version = 3
+    version = 1
 )
 abstract class PokemonDatabase : RoomDatabase() {
     abstract val dao: PokemonsDao

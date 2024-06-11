@@ -1,3 +1,5 @@
+@file:Suppress("SameParameterValue")
+
 package royerdavid.pokedex.core.data
 
 import android.content.Context

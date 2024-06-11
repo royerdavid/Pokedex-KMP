@@ -9,7 +9,6 @@ import royerdavid.pokedex.app.data.local.PokemonsDao
 import royerdavid.pokedex.app.data.mappers.toEntity
 import royerdavid.pokedex.app.data.mappers.toModel
 import royerdavid.pokedex.app.data.remote.PokemonsApi
-import royerdavid.pokedex.app.data.remote.dto.NamedApiResourceDto
 import royerdavid.pokedex.app.domain.PokemonsRepository
 import royerdavid.pokedex.app.domain.model.PokemonSummary
 import royerdavid.pokedex.core.util.Resource
@@ -22,33 +21,61 @@ class PokemonsRepositoryImpl(
     private val dao: PokemonsDao
 ) : PokemonsRepository {
 
-    override suspend fun getPokemonSummaries(): Flow<Resource<List<PokemonSummary>>> = flow {
-        emit(Resource.Loading())
-        val cachedPokemonList = dao.getAllPokemonSummaries().map { it.toModel() }
-        emit(Resource.Loading(cachedPokemonList))
+    /**
+     * Loading = true
+     * Return data from from DB
+     *
+     *
+     */
+    override suspend fun getPokemonSummaries(
+        fetchFromRemote: Boolean,
+        query: String
+    ): Flow<Resource<List<PokemonSummary>>> {
+        return flow {
+            emit(Resource.Loading(true))
 
-        var remotePokemonList: List<NamedApiResourceDto>? = null
+            // Get listing from cache
+            val localListings = dao.searchPokemonSummaries(query)
+            emit(Resource.Success(
+                data = localListings.map { it.toModel() }
+            ))
 
-        try {
-            remotePokemonList = api.getPokemonSummaries().getOrThrow().results
-        } catch (e: IOException) {
-            emit(Resource.Error(e, cachedPokemonList))
-        } catch (e: ResponseException) {
-            emit(Resource.Error(e, cachedPokemonList))
+            // Quick exit when we have listing from cache and no remote fetch
+            val isDbEmpty = localListings.isEmpty() && query.isBlank()
+            val shouldJustLoadFromCache = !isDbEmpty && !fetchFromRemote
+            if (shouldJustLoadFromCache) {
+                emit(Resource.Loading(false))
+                return@flow
+            }
+
+            // Get remote listing
+            val remoteListings = try {
+                api.getPokemonSummaries().results
+            } catch (e: IOException) {
+                e.printStackTrace()
+                emit(Resource.Error(e))
+                emit(Resource.Loading(false))
+                null
+            } catch (e: ResponseException) {
+                e.printStackTrace()
+                emit(Resource.Error(e))
+                emit(Resource.Loading(false))
+                null
+            }
+
+            // Update cache with remote listing & return updated listing
+            remoteListings?.let { listings ->
+                dao.clearPokemonSummaries()
+                dao.insertPokemonSummaries(
+                    listings.map { it.toEntity() }
+                )
+                emit(Resource.Success(
+                    data = dao
+                        .searchPokemonSummaries("")
+                        .map { it.toModel() }
+                ))
+                emit(Resource.Loading(false))
+            }
         }
-
-        if (!remotePokemonList.isNullOrEmpty()) {
-            dao.insertAll(
-                remotePokemonList.map {
-                    it.toEntity()
-                }
-            )
-        }
-
-        // Newly inserted items
-        val newPokemonList = dao.getAllPokemonSummaries().map {
-            it.toModel()
-        }
-        emit(Resource.Success(newPokemonList))
     }
 }
