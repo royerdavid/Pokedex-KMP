@@ -50,7 +50,7 @@ Run the "*composeApp*" configuration for your desired platform:
 
 ## Future Improvements
 
-- Improve error handling to have more specific messages
+- Improve error handling to have an abstraction between "data" and "presentation" layers
 - Add a sorting by "name" or "ID" and display the pokemon ID
 - Implement a "SwipeRefresh" instead of a refresh button
 - Introduce a use cases layer
@@ -58,3 +58,4 @@ Run the "*composeApp*" configuration for your desired platform:
 - Create ViewModel unit tests
 - Put back the details screen from original Android project
 - Split the project in modules
+- 
