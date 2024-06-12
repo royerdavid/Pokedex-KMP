@@ -2,7 +2,20 @@
     <string name="action_delete">Delete</string>
     <string name="action_refresh">Refresh</string>
     <string name="action_search">Search</string>
-    <string name="error_invalid_response">Invalid server response</string>
-    <string name="error_no_items_found">No items found</string>
-    <string name="error_unexpected">Unexpected error</string>
+
+    <string name="error_connection_timeout">Error: Connection timeout</string>
+    <string name="error_no_connection">Couldn't connect to the server. Please check your internet connection.</string>
+    <string name="error_request_timeout">Error: Request timeout</string>
+    <string name="error_serialization">Error: Invalid server response</string>
+    <string name="error_socket_timeout">Error: timeout</string>
+    <string name="error_unknown">An unexpected error has happened</string>
+    <string name="error_unknown_x">An unexpected error has happened (%s)</string>
+    <string name="error_http400">Error: Bad request</string>
+    <string name="error_http401">You are not authorized to access this content</string>
+    <string name="error_http403">You are have the permissions to to access this content</string>
+    <string name="error_http404">The requested data was not found</string>
+    <string name="error_http500">Internal server error</string>
+    <string name="error_http502">Error: Bad gateway</string>
+    <string name="error_http503">The service is currently unavailable</string>
+
 </resources>

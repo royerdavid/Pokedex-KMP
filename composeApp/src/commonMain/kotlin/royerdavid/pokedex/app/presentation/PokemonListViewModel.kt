@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import royerdavid.pokedex.app.domain.PokemonsRepository
 import royerdavid.pokedex.app.domain.model.PokemonSummary
-import royerdavid.pokedex.core.util.Resource
+import royerdavid.pokedex.core.data.DataResult
+import royerdavid.pokedex.core.presentation.getString
 import royerdavid.pokedex.core.util.copyEnqueueDistinct
 
 
@@ -56,23 +57,18 @@ class PokemonListViewModel(
                 .getPokemonSummaries(fetchFromRemote, query)
                 .collect { result ->
                     when (result) {
-                        is Resource.Success -> {
-                            result.data?.let { listings ->
-                                _uiState.value = _uiState.value.copy(pokemons = listings)
-                            }
-                        }
+                        is DataResult.Success ->
+                            _uiState.value = _uiState.value.copy(pokemons = result.data)
 
-                        is Resource.Error -> {
+                        is DataResult.Error ->
                             _uiState.value = _uiState.value.copy(
                                 transientMessages = _uiState.value.transientMessages.copyEnqueueDistinct(
-                                    result.exception?.message ?: "TODO: display nice error here"
+                                    result.error.getString()
                                 )
                             )
-                        }
 
-                        is Resource.Loading -> {
+                        is DataResult.Loading ->
                             _uiState.value = _uiState.value.copy(isLoading = result.isLoading)
-                        }
                     }
                 }
         }

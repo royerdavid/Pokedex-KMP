@@ -1,4 +1,4 @@
-package royerdavid.pokedex.core.network
+package royerdavid.pokedex.core.data
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -30,7 +30,9 @@ internal fun createHttpClient(logger: Logger) =
         }
 
         install(ContentNegotiation) {
-            json(Json { ignoreUnknownKeys = true })
+            json(Json {
+                ignoreUnknownKeys = true
+            })
         }
 
         defaultRequest {

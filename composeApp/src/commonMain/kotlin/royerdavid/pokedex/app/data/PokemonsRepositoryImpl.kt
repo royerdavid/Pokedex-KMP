@@ -1,8 +1,6 @@
 package royerdavid.pokedex.app.data
 
 
-import io.ktor.client.plugins.ResponseException
-import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import royerdavid.pokedex.app.data.local.PokemonsDao
@@ -11,71 +9,81 @@ import royerdavid.pokedex.app.data.mappers.toModel
 import royerdavid.pokedex.app.data.remote.PokemonsApi
 import royerdavid.pokedex.app.domain.PokemonsRepository
 import royerdavid.pokedex.app.domain.model.PokemonSummary
-import royerdavid.pokedex.core.util.Resource
+import royerdavid.pokedex.core.data.DataError
+import royerdavid.pokedex.core.data.DataResult
+import royerdavid.pokedex.core.data.toDataError
+import royerdavid.pokedex.core.util.Logger
+import kotlin.coroutines.cancellation.CancellationException
+
 
 /**
  * Repository to handle pokemon data
  */
 class PokemonsRepositoryImpl(
     private val api: PokemonsApi,
-    private val dao: PokemonsDao
+    private val dao: PokemonsDao,
+    private val logger: Logger
 ) : PokemonsRepository {
 
-    /**
-     * Loading = true
-     * Return data from from DB
-     *
-     *
-     */
+    companion object {
+        private const val LOG_TAG = "PokemonsRepo"
+    }
+
     override suspend fun getPokemonSummaries(
         fetchFromRemote: Boolean,
         query: String
-    ): Flow<Resource<List<PokemonSummary>>> {
+    ): Flow<DataResult<List<PokemonSummary>, DataError>> {
         return flow {
-            emit(Resource.Loading(true))
+            emit(DataResult.Loading(true))
 
             // Get listing from cache
             val localListings = dao.searchPokemonSummaries(query)
-            emit(Resource.Success(
-                data = localListings.map { it.toModel() }
-            ))
+            emit(
+                DataResult.Success(
+                    data = localListings.map { it.toModel() }
+                ))
 
             // Quick exit when we have listing from cache and no remote fetch
-            val isDbEmpty = localListings.isEmpty() && query.isBlank()
-            val shouldJustLoadFromCache = !isDbEmpty && !fetchFromRemote
-            if (shouldJustLoadFromCache) {
-                emit(Resource.Loading(false))
+            val isCacheEmpty = localListings.isEmpty() && query.isBlank()
+            val fromCacheOnly = !isCacheEmpty && !fetchFromRemote
+            if (fromCacheOnly) {
+                emit(DataResult.Loading(false))
                 return@flow
             }
 
             // Get remote listing
+            var dataError: DataError? = null
+
             val remoteListings = try {
                 api.getPokemonSummaries().results
-            } catch (e: IOException) {
-                e.printStackTrace()
-                emit(Resource.Error(e))
-                emit(Resource.Loading(false))
-                null
-            } catch (e: ResponseException) {
-                e.printStackTrace()
-                emit(Resource.Error(e))
-                emit(Resource.Loading(false))
+            } catch (e: CancellationException) {
+                logger.d(tag = LOG_TAG, message = "Rethrowing CancellationException")
+                throw e
+            } catch (e: Exception) {
+                dataError = e.toDataError()
                 null
             }
 
-            // Update cache with remote listing & return updated listing
-            remoteListings?.let { listings ->
-                dao.clearPokemonSummaries()
-                dao.insertPokemonSummaries(
-                    listings.map { it.toEntity() }
-                )
-                emit(Resource.Success(
-                    data = dao
-                        .searchPokemonSummaries("")
-                        .map { it.toModel() }
-                ))
-                emit(Resource.Loading(false))
+            if (dataError == null) {
+                // Update cache with remote listing & return updated listing
+                remoteListings?.let { listings ->
+                    dao.clearPokemonSummaries()
+                    dao.insertPokemonSummaries(
+                        listings.map { it.toEntity() }
+                    )
+                    emit(
+                        DataResult.Success(
+                            data = dao
+                                .searchPokemonSummaries("")
+                                .map { it.toModel() }
+                        ))
+                }
+            } else {
+                // Propagate the error
+                emit(DataResult.Error(dataError))
             }
+
+            emit(DataResult.Loading(false))
         }
     }
 }

@@ -13,7 +13,7 @@ import royerdavid.pokedex.app.domain.PokemonsRepository
 
 val appModule = module {
     single<PokemonsRepository> {
-        PokemonsRepositoryImpl(get(), get())
+        PokemonsRepositoryImpl(get(), get(), get())
     }
 
     single {
