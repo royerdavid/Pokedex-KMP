@@ -3,7 +3,7 @@
     <string name="action_refresh">Rafraîchir</string>
     <string name="action_search">Rechercher</string>
 
-    <string name="error_connection_timeout">Erreur: Temps de connextion maximal dépassé</string>
+    <string name="error_connection_timeout">Erreur: Temps de connexion maximal dépassé</string>
     <string name="error_no_connection">Impossible de contacter le serveur. SVP vérifiez votre connexion Internet.</string>
     <string name="error_request_timeout">Erreur: Temps de requête maximale dépassé</string>
     <string name="error_serialization">Erreur: Réponse de serveur incalide</string>
